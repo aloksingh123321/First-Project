@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import CustomCursor from "@/components/ui/CustomCursor";
-import CursorTrail from "@/components/ui/CursorTrail";
+
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import "@/styles/globals.css";
@@ -54,12 +53,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${syne.variable}`}>
-      <body className="font-sans antialiased has-custom-cursor">
+      <body className="font-sans antialiased">
         {/* 2px reading progress bar at top */}
         <ScrollProgress />
-        {/* Custom magnetic cursor + luminous trail */}
-        <CustomCursor />
-        <CursorTrail />
+
         {/* Lenis smooth inertia scroll */}
         <SmoothScroll>
           <Navbar />
