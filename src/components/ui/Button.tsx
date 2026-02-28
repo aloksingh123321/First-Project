@@ -2,7 +2,6 @@
 
 import { useRef, useState, useCallback } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
-import Link from "next/link";
 import { type ReactNode, type CSSProperties } from "react";
 
 interface ButtonProps {
