@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://mediamaestroco.com
+
+# Sitemaps
+Sitemap: https://mediamaestroco.com/sitemap.xml

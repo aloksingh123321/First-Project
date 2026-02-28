@@ -1,0 +1,622 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — Full Dark Theme + Glass
+   ═══════════════════════════════════════════ */
+
+:root {
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-syne: "Syne", system-ui, sans-serif;
+  --primary: #8254f4;
+  --primary-light: #9d75f7;
+  --primary-dark: #6535e8;
+  --primary-glow: rgba(130, 84, 244, 0.12);
+  --surface: #0a0a0c;
+  --surface-dark: #060608;
+  --surface-card: #111116;
+  --surface-elevated: #18181f;
+  --text-primary: #eae8f0;
+  --text-muted: #8a8698;
+  --silver: #6b6778;
+  --border: rgba(255, 255, 255, 0.06);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-inter);
+  color: var(--text-primary);
+  background-color: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ═══ Custom Cursor — hide native on desktop ═══ */
+@media (pointer: fine) {
+  body.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* ═══ Fluid Typography ═══ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-syne);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h1 {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+p {
+  line-height: 1.7;
+}
+
+/* ═══ Grain Overlay ═══ */
+.grain-overlay {
+  position: relative;
+}
+
+.grain-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ═══ Ken Burns Hero Background ═══ */
+@keyframes ken-burns {
+  0% {
+    transform: scale(1) translateX(0%) translateY(0%);
+  }
+
+  25% {
+    transform: scale(1.06) translateX(-1%) translateY(-0.5%);
+  }
+
+  50% {
+    transform: scale(1.1) translateX(1%) translateY(0.5%);
+  }
+
+  75% {
+    transform: scale(1.06) translateX(-0.5%) translateY(1%);
+  }
+
+  100% {
+    transform: scale(1) translateX(0%) translateY(0%);
+  }
+}
+
+.hero-bg-img {
+  animation: ken-burns 22s ease-in-out infinite;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+/* ═══ Animated Mesh Gradient Blob ═══ */
+@keyframes mesh-drift {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+
+  33% {
+    transform: translate(-46%, -54%) rotate(120deg) scale(1.15);
+  }
+
+  66% {
+    transform: translate(-54%, -46%) rotate(240deg) scale(0.9);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1);
+  }
+}
+
+.mesh-blob {
+  animation: mesh-drift 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ═══ Marquee ═══ */
+.marquee-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 2rem;
+  white-space: nowrap;
+  width: max-content;
+  animation: marquee-scroll 25s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ═══ Marquee Glow Edge Masks ═══ */
+.marquee-container::before,
+.marquee-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-container::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--surface-dark) 0%, transparent 100%);
+}
+
+.marquee-container::after {
+  right: 0;
+  background: linear-gradient(-90deg, var(--surface-dark) 0%, transparent 100%);
+}
+
+/* ═══ Glass Navbar ═══ */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ═══ Glass Card ═══ */
+.glass-card {
+  background: rgba(17, 17, 22, 0.7);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+}
+
+/* ═══ Glass Capsule (Nav link hover) ═══ */
+.glass-capsule {
+  padding: 6px 16px;
+  border-radius: 999px;
+  transition: all 0.3s ease;
+}
+
+.glass-capsule:hover {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ═══ Glass Marquee Container ═══ */
+.glass-marquee {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ═══ 3D Tilt Portfolio Card ═══ */
+.tilt-card {
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  transition: box-shadow 0.3s ease;
+}
+
+.tilt-card:hover {
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 50px rgba(130, 84, 244, 0.12);
+}
+
+/* ═══ Page Transition Wrapper ═══ */
+.page-transition {
+  animation: page-fade-in 0.45s ease forwards;
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══ Service Card Accordion ═══ */
+.service-details {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.service-details.open {
+  max-height: 300px;
+  opacity: 1;
+}
+
+/* ═══ Custom Scrollbar ═══ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* ═══ Selection & Focus ═══ */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ═══ Legal Pages Prose ═══ */
+.prose-legal {
+  max-width: 72ch;
+  margin: 0 auto;
+}
+
+.prose-legal h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  color: var(--text-primary);
+}
+
+.prose-legal h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  color: var(--text-primary);
+}
+
+.prose-legal p {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.prose-legal ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+}
+
+.prose-legal li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-legal a {
+  color: var(--primary-light);
+  text-decoration: underline;
+}
+
+/* ═══ Hero Text Breathing ═══ */
+@keyframes text-breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.0015);
+  }
+}
+
+.text-breathe {
+  animation: text-breathe 5s ease-in-out infinite;
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ═══ Button Click Ripple ═══ */
+.ripple-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-btn .ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(0);
+  animation: ripple-expand 0.6s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple-expand {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ═══ Nav Link Underline Draw ═══ */
+.nav-link-draw {
+  position: relative;
+}
+
+.nav-link-draw::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 1px;
+  background: var(--primary-light);
+  transition: left 0.3s ease, right 0.3s ease;
+  border-radius: 1px;
+}
+
+.nav-link-draw:hover::after {
+  left: 16px;
+  right: 16px;
+}
+
+/* ═══ Oversized Section Number Label ═══ */
+.section-number {
+  font-family: var(--font-syne);
+  font-size: clamp(5rem, 12vw, 10rem);
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(130, 84, 244, 0.08);
+  user-select: none;
+  pointer-events: none;
+  letter-spacing: -0.04em;
+}
+
+/* ═══ Gradient Fade Divider ═══ */
+.gradient-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.gradient-divider::before,
+.gradient-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(130, 84, 244, 0.35), transparent);
+}
+
+.gradient-divider-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+  flex-shrink: 0;
+}
+
+/* ═══ Service Icon Glow Pulse (at rest) ═══ */
+@keyframes icon-heartbeat {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0px rgba(130, 84, 244, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 14px rgba(130, 84, 244, 0.4), 0 0 6px rgba(130, 84, 244, 0.2);
+  }
+}
+
+.icon-pulse {
+  animation: icon-heartbeat 3s ease-in-out infinite;
+}
+
+/* Pause the pulse whenever the card is hovered */
+.glass-card:hover .icon-pulse {
+  animation-play-state: paused;
+}
+
+/* ═══ Client Logo Strip ═══ */
+.logo-strip {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.logo-pill {
+  padding: 6px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.logo-pill:hover {
+  color: var(--primary-light);
+  border-color: rgba(130, 84, 244, 0.35);
+  background: rgba(130, 84, 244, 0.06);
+}
+
+/* ═══ Marquee Item Hover Preview ═══ */
+.marquee-item-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: default;
+}
+
+.marquee-preview {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: 120px;
+  height: 70px;
+  border-radius: 8px;
+  background: var(--surface-card);
+  border: 1px solid rgba(130, 84, 244, 0.2);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  z-index: 20;
+}
+
+.marquee-item-wrap:hover .marquee-preview {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0px);
+}
+
+/* ═══ Utility Classes ═══ */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* ═══ Hero Ambient Floating Particles ═══ */
+@keyframes float-drift {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: var(--p-opacity, 0.15);
+  }
+
+  25% {
+    transform: translate(12px, -18px) scale(1.1);
+    opacity: calc(var(--p-opacity, 0.15) * 0.7);
+  }
+
+  50% {
+    transform: translate(-8px, -30px) scale(0.9);
+    opacity: var(--p-opacity, 0.15);
+  }
+
+  75% {
+    transform: translate(16px, -14px) scale(1.05);
+    opacity: calc(var(--p-opacity, 0.15) * 0.5);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: var(--p-opacity, 0.15);
+  }
+}
+
+.hero-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: float-drift linear infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* ═══ Animated SVG Grid Diagonal Lines ═══ */
+@keyframes dash-march {
+  from {
+    stroke-dashoffset: 24;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animated-grid-svg .grid-diag-line {
+  animation: dash-march 3s linear infinite;
+}
+
+/* ═══ Drag Reel grab cursor ═══ */
+.drag-reel-track {
+  cursor: grab;
+}
+
+.drag-reel-track:active {
+  cursor: grabbing;
+}
