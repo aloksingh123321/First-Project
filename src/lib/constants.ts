@@ -165,7 +165,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   // 1 — Hero: Aroma Candles product shoot result (main image, prominent)
   {
     id: 1,
-    src: "/assets/gallary/main - 8.png",
+    src: "/assets/gallary/main-8.png",
     type: "image",
     orientation: "portrait",
     title: "Aroma Candles — Product Shoot",
@@ -195,7 +195,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   // 4 — Aroma Candles video
   {
     id: 4,
-    src: "/assets/gallary/Aroma Candles.mp4",
+    src: "/assets/gallary/aroma-candles.mp4",
     type: "video",
     orientation: "portrait",
     title: "Aroma Candles — Behind the Lens",
@@ -266,7 +266,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   // 10 — Mithala Art video
   {
     id: 10,
-    src: "/assets/gallary/Mithala Art.mp4",
+    src: "/assets/gallary/mithala-art.mp4",
     type: "video",
     orientation: "portrait",
     title: "Mithala Art — Process Film",
@@ -286,7 +286,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   // 12 — Product Shoots
   {
     id: 12,
-    src: "/assets/gallary/Product Shoots (1).png",
+    src: "/assets/gallary/product-shoots-1.png",
     type: "image",
     orientation: "portrait",
     title: "Product Photography",
