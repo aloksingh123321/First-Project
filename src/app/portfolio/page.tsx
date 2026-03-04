@@ -1,20 +1,95 @@
 "use client";
 
-import { useState } from "react";
-import { ImageIcon } from "lucide-react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
+import Image from "next/image";
 import FadeInView from "@/components/animations/FadeInView";
-import { PORTFOLIO_ITEMS } from "@/lib/constants";
+import { GALLERY_ITEMS, type GalleryItem } from "@/lib/constants";
 
-const CATEGORIES = ["All", "Reels", "Shoots", "Ads", "Editing"] as const;
-type Category = (typeof CATEGORIES)[number];
+/** Renders the hover preview via React portal so it is always
+ *  centered in the viewport regardless of scroll or CSS transforms. */
+function PreviewPortal({ item }: { item: GalleryItem }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0,0,0,0.75)",
+        pointerEvents: "none",
+        animation: "portfolioFadeIn 0.2s ease-out",
+      }}
+    >
+      <div
+        style={{
+          position: "relative",
+          maxWidth: "80vw",
+          maxHeight: "80vh",
+          borderRadius: "1rem",
+          overflow: "hidden",
+          boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          animation: "portfolioScaleIn 0.25s ease-out",
+        }}
+      >
+        <Image
+          src={item.src}
+          alt={item.title}
+          width={item.orientation === "landscape" ? 1536 : 1024}
+          height={item.orientation === "landscape" ? 1024 : 1536}
+          className="block w-auto h-auto"
+          style={{
+            maxWidth: "80vw",
+            maxHeight: "80vh",
+            objectFit: "contain",
+          }}
+          priority
+        />
+        {/* Title bar */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: "linear-gradient(to top, rgba(0,0,0,0.85), transparent)",
+            padding: "1.5rem",
+          }}
+        >
+          <h3 className="text-white font-display font-bold text-lg">
+            {item.title}
+          </h3>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 export default function PortfolioPage() {
-  const [activeFilter, setActiveFilter] = useState<Category>("All");
+  const [hoveredItem, setHoveredItem] = useState<GalleryItem | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const filteredItems =
-    activeFilter === "All"
-      ? PORTFOLIO_ITEMS
-      : PORTFOLIO_ITEMS.filter((item) => item.category === activeFilter);
+  const handleMouseEnter = useCallback((item: GalleryItem) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setHoveredItem(item);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    timeoutRef.current = setTimeout(() => setHoveredItem(null), 150);
+  }, []);
 
   return (
     <>
@@ -35,66 +110,90 @@ export default function PortfolioPage() {
           <FadeInView delay={0.2}>
             <p className="text-text-muted text-lg max-w-2xl mx-auto">
               A showcase of our recent projects across content creation,
-              photography, video editing, and digital advertising.
+              photography, video production, and digital advertising.
             </p>
           </FadeInView>
         </div>
       </section>
 
-      {/* Portfolio Grid with Filters */}
+      {/* Full Masonry Gallery */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Filter Buttons */}
-          <FadeInView className="flex flex-wrap justify-center gap-3 mb-12">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
-                  activeFilter === cat
-                    ? "bg-primary text-white shadow-glow"
-                    : "bg-surface-card text-text-muted border border-white/10 hover:border-primary/40 hover:text-primary"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </FadeInView>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[200px]">
+            {GALLERY_ITEMS.map((item) => {
+              const isCircularLogo = item.objectFit === "contain";
 
-          {/* Masonry-style Grid */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-            {filteredItems.map((item, i) => (
-              <div
-                key={item.id}
-                className="break-inside-avoid group relative overflow-hidden rounded-2xl cursor-pointer glass-card transition-all duration-300 hover:border-primary/20 hover:shadow-glow"
-              >
-                {/* PLACEHOLDER: Replace with actual portfolio image */}
+              return (
                 <div
-                  className={`w-full bg-gradient-to-br from-primary/10 via-surface-card to-surface-dark flex items-center justify-center ${
-                    i % 3 === 0
-                      ? "aspect-[3/4]"
-                      : i % 3 === 1
-                      ? "aspect-square"
-                      : "aspect-[4/5]"
-                  }`}
+                  key={item.id}
+                  className={`group relative overflow-hidden rounded-xl glass-card cursor-pointer transition-all duration-300 hover:border-primary/20 hover:shadow-glow ${
+                    item.colSpan === 2 ? "sm:col-span-2" : ""
+                  } ${item.rowSpan === 2 ? "row-span-2" : ""}`}
+                  onMouseEnter={() => handleMouseEnter(item)}
+                  onMouseLeave={handleMouseLeave}
                 >
-                  <ImageIcon className="text-primary-light opacity-20 w-10 h-10" />
-                </div>
+                  {/* Media */}
+                  {item.type === "video" ? (
+                    <video
+                      src={item.src}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : isCircularLogo ? (
+                    <div className="absolute inset-0 flex items-center justify-center bg-surface-card">
+                      <div className="relative w-[70%] aspect-square rounded-full overflow-hidden">
+                        <Image
+                          src={item.src}
+                          alt={item.title}
+                          fill
+                          className="object-contain"
+                          sizes="200px"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <Image
+                      src={item.src}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    />
+                  )}
 
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/95 via-surface-dark/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                  <span className="inline-block px-3 py-1 mb-2 text-xs font-medium bg-primary/20 text-primary-light rounded-full w-fit border border-primary/30">
-                    {item.category}
-                  </span>
-                  <h3 className="text-text-primary font-display font-bold text-sm">
-                    {item.title}
-                  </h3>
+                  {/* Hover overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                    <h3 className="text-text-primary font-display font-bold text-sm">
+                      {item.title}
+                    </h3>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
+
+      {/* Hover Preview — rendered via portal on document.body */}
+      {hoveredItem && hoveredItem.type === "image" && (
+        <PreviewPortal item={hoveredItem} />
+      )}
+
+      {/* Global animation keyframes */}
+      <style jsx global>{`
+        @keyframes portfolioFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes portfolioScaleIn {
+          from { opacity: 0; transform: scale(0.92); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </>
   );
 }
+

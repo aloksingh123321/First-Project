@@ -1,120 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ImageIcon } from "lucide-react";
+import Image from "next/image";
 import FadeInView from "@/components/animations/FadeInView";
-import StaggerChildren, {
-  StaggerItem,
-} from "@/components/animations/StaggerChildren";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
-import DragReel from "@/components/ui/DragReel";
-import { PORTFOLIO_ITEMS } from "@/lib/constants";
-
-// 3D Tilt Portfolio Card
-function TiltCard({ item }: { item: (typeof PORTFOLIO_ITEMS)[0] }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), {
-    stiffness: 200,
-    damping: 25,
-  });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), {
-    stiffness: 200,
-    damping: 25,
-  });
-
-  // Glow follows mouse
-  const glowX = useTransform(x, [-0.5, 0.5], ["0%", "100%"]);
-  const glowY = useTransform(y, [-0.5, 0.5], ["0%", "100%"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    x.set(nx);
-    y.set(ny);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-    setIsHovered(false);
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      className="portfolio-card group relative overflow-hidden rounded-2xl glass-card cursor-pointer"
-      data-cursor="portfolio"
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-        perspective: 1000,
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      whileHover={{
-        borderColor: "rgba(130,84,244,0.35)",
-        boxShadow:
-          "0 25px 50px rgba(0,0,0,0.45), 0 0 50px rgba(130,84,244,0.14)",
-      }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Mouse-tracking glow border */}
-      {isHovered && (
-        <motion.div
-          className="absolute inset-0 z-10 pointer-events-none rounded-2xl"
-          style={{
-            background: "transparent",
-            boxShadow: "inset 0 0 0 1px rgba(130,84,244,0.5)",
-          }}
-        />
-      )}
-
-      {/* Image / placeholder */}
-      <div className="aspect-[4/5] bg-gradient-to-br from-primary/10 via-surface-card to-surface-dark flex items-center justify-center relative overflow-hidden">
-        <ImageIcon className="text-primary-light opacity-20 w-10 h-10" />
-
-        {/* Shimmer on hover */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          style={{
-            background: `radial-gradient(circle at ${glowX} ${glowY}, rgba(130,84,244,0.15) 0%, transparent 60%)`,
-          }}
-        />
-      </div>
-
-      {/* Hover overlay */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-t from-surface-dark/95 via-transparent to-transparent flex flex-col justify-end p-5"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.25 }}
-      >
-        <span className="inline-block px-3 py-1 mb-2 text-xs font-medium bg-primary/20 text-primary-light rounded-full w-fit border border-primary/30">
-          {item.category}
-        </span>
-        <h3 className="text-text-primary font-display font-bold text-sm">
-          {item.title}
-        </h3>
-      </motion.div>
-    </motion.div>
-  );
-}
+import { GALLERY_ITEMS } from "@/lib/constants";
 
 export default function PortfolioGrid() {
-  const previewItems = PORTFOLIO_ITEMS.slice(0, 6);
+  // Show first 6 items on homepage as a teaser
+  const previewItems = GALLERY_ITEMS.slice(0, 6);
 
   return (
     <section className="py-20 md:py-28 bg-surface relative overflow-hidden">
@@ -126,18 +20,44 @@ export default function PortfolioGrid() {
           subtitle="A glimpse into our recent projects."
         />
 
-        <StaggerChildren className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Masonry Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[200px]">
           {previewItems.map((item) => (
-            <StaggerItem key={item.id}>
-              <TiltCard item={item} />
-            </StaggerItem>
-          ))}
-        </StaggerChildren>
+            <div
+              key={item.id}
+              className={`group relative overflow-hidden rounded-xl glass-card cursor-pointer transition-all duration-300 hover:border-primary/20 hover:shadow-glow ${
+                item.colSpan === 2 ? "sm:col-span-2" : ""
+              } ${item.rowSpan === 2 ? "row-span-2" : ""}`}
+            >
+              {/* Media */}
+              {item.type === "video" ? (
+                <video
+                  src={item.src}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <Image
+                  src={item.src}
+                  alt={item.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+              )}
 
-        {/* ═══ Horizontal Drag Reel ═══ */}
-        <FadeInView delay={0.2}>
-          <DragReel />
-        </FadeInView>
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                <h3 className="text-text-primary font-display font-bold text-sm">
+                  {item.title}
+                </h3>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <FadeInView delay={0.3} className="text-center mt-10">
           <Button href="/portfolio" variant="outline">

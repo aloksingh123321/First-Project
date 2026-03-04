@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Lightbulb, Compass, BarChart3 } from "lucide-react";
 import FadeInView from "@/components/animations/FadeInView";
 import StaggerChildren, {
@@ -100,12 +101,22 @@ export default function AboutPage() {
             {TEAM.map((member, i) => (
               <StaggerItem key={i}>
                 <div className="glass-card rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/20 hover:shadow-glow">
-                  <div className="aspect-square bg-gradient-to-br from-primary/15 via-surface-card to-surface-dark flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-2xl font-display font-bold text-primary-light">
-                        {member.name.charAt(0)}
-                      </span>
-                    </div>
+                  <div className="aspect-square bg-gradient-to-br from-primary/15 via-surface-card to-surface-dark flex items-center justify-center relative">
+                    {member.image ? (
+                      <Image
+                        src={member.image}
+                        alt={`${member.name} - ${member.role}`}
+                        fill
+                        className="object-cover object-top"
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-2xl font-display font-bold text-primary-light">
+                          {member.name.charAt(0)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <div className="p-5 text-center">
                     <h3 className="font-display font-bold text-text-primary text-lg">

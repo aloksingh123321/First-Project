@@ -1,19 +1,18 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { PORTFOLIO_ITEMS } from "@/lib/constants";
-import { ImageIcon } from "lucide-react";
+import { GALLERY_ITEMS } from "@/lib/constants";
 
 // Horizontal momentum drag reel — physics-based, rubber-band edges.
 // Users can fling the reel left/right like an agency portfolio strip.
-// Used by Huge, Work & Co, Superlist for premium portfolio UX.
 
 export default function DragReel() {
     const constraintsRef = useRef<HTMLDivElement>(null);
 
-    // Show all items (or repeat for visual density)
-    const reelItems = [...PORTFOLIO_ITEMS, ...PORTFOLIO_ITEMS];
+    // Repeat for visual density
+    const reelItems = [...GALLERY_ITEMS, ...GALLERY_ITEMS];
 
     return (
         <div className="mt-16 overflow-hidden cursor-grab active:cursor-grabbing select-none">
@@ -45,7 +44,7 @@ function ReelCard({
     item,
     index,
 }: {
-    item: (typeof PORTFOLIO_ITEMS)[0];
+    item: (typeof GALLERY_ITEMS)[0];
     index: number;
 }) {
     return (
@@ -54,18 +53,30 @@ function ReelCard({
             whileHover={{ scale: 1.03, borderColor: "rgba(130,84,244,0.4)" }}
             transition={{ type: "spring", stiffness: 280, damping: 22 }}
         >
-            {/* Placeholder visual — gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-surface-card to-surface-dark flex items-center justify-center">
-                <ImageIcon className="text-primary-light opacity-15 w-8 h-8" />
-            </div>
+            {/* Media */}
+            {item.type === "video" ? (
+                <video
+                    src={item.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                />
+            ) : (
+                <Image
+                    src={item.src}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    sizes="280px"
+                />
+            )}
 
             {/* Hover overlay info */}
             <motion.div
                 className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-transparent to-transparent flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             >
-                <span className="text-[10px] font-semibold text-primary-light uppercase tracking-widest mb-1 bg-primary/20 border border-primary/30 rounded-full px-2 py-0.5 w-fit">
-                    {item.category}
-                </span>
                 <h3 className="text-text-primary text-sm font-display font-bold leading-tight">
                     {item.title}
                 </h3>
@@ -73,7 +84,7 @@ function ReelCard({
 
             {/* Subtle index number watermark */}
             <span className="absolute top-3 right-4 text-[10px] font-mono text-primary/20 font-bold select-none">
-                {String((index % PORTFOLIO_ITEMS.length) + 1).padStart(2, "0")}
+                {String((index % GALLERY_ITEMS.length) + 1).padStart(2, "0")}
             </span>
         </motion.div>
     );

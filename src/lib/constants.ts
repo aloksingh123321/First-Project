@@ -24,6 +24,7 @@ export interface Service {
   shortDescription: string;
   fullDescription: string;
   icon: LucideIcon;
+  image: string;
 }
 
 export const SERVICES: Service[] = [
@@ -35,6 +36,7 @@ export const SERVICES: Service[] = [
     fullDescription:
       "We create strategic, trend-driven, and brand-focused content that connects with your target audience. From Instagram reels to promotional creatives, we design content that builds visibility and engagement while keeping your brand identity strong and consistent.",
     icon: Palette,
+    image: "/assets/Content Creation.png",
   },
   {
     id: "professional-shooting",
@@ -44,6 +46,7 @@ export const SERVICES: Service[] = [
     fullDescription:
       "Our team provides high-quality photo and video shoots tailored to your brand. Whether it's lifestyle, corporate, fashion, or hospitality, we capture visuals that tell your story with clarity and creativity.",
     icon: Camera,
+    image: "/assets/Professional Shooting.png",
   },
   {
     id: "editing",
@@ -53,6 +56,7 @@ export const SERVICES: Service[] = [
     fullDescription:
       "We transform raw footage into compelling visual stories. Our editing services include reel editing, promotional videos, cinematic cuts, transitions, color grading, and sound design — ensuring your content stands out in the digital space.",
     icon: Film,
+    image: "/assets/Editing.png",
   },
   {
     id: "social-media-management",
@@ -62,6 +66,7 @@ export const SERVICES: Service[] = [
     fullDescription:
       "We manage your social presence end-to-end — from content planning and posting to engagement and analytics. Our goal is to grow your brand online, increase reach, and build a loyal community around your business.",
     icon: Share2,
+    image: "/assets/Social Media Management.png",
   },
   {
     id: "paid-ads",
@@ -71,6 +76,7 @@ export const SERVICES: Service[] = [
     fullDescription:
       "We run targeted ad campaigns on platforms like Instagram and Facebook to generate leads, increase sales, and boost brand awareness. Our ad strategies focus on ROI-driven results with continuous optimization and performance tracking.",
     icon: Target,
+    image: "/assets/Paid Ads (Performance Marketing).png",
   },
   {
     id: "product-shoots",
@@ -80,6 +86,7 @@ export const SERVICES: Service[] = [
     fullDescription:
       "We specialize in aesthetic and conversion-focused product photography and videography. Whether for e-commerce, social media, or advertisements, we create visuals that highlight product details and enhance buying appeal.",
     icon: Box,
+    image: "/assets/Product Shoots.png",
   },
 ];
 
@@ -93,13 +100,13 @@ export interface TeamMember {
 export const TEAM: TeamMember[] = [
   {
     name: "Team Member",
-    role: "Co-Founder",
-    image: "/assets/placeholder-team-1.svg",
+    role: "Founder",
+    image: "/assets/placeholder-team-1.jpeg",
   },
   {
     name: "Team Member",
     role: "Co-Founder",
-    image: "/assets/placeholder-team-2.svg",
+    image: "/assets/placeholder-team-2.jpeg",
   },
 ];
 
@@ -139,25 +146,153 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-// Portfolio items (placeholder)
-export interface PortfolioItem {
+// Gallery items
+export interface GalleryItem {
   id: number;
+  src: string;
+  type: "image" | "video";
+  orientation: "portrait" | "landscape";
   title: string;
-  category: "Reels" | "Shoots" | "Ads" | "Editing";
-  image: string;
+  /** CSS grid column span (desktop) */
+  colSpan: 1 | 2;
+  /** CSS grid row span (desktop) */
+  rowSpan: 1 | 2;
+  /** Optional: override object-fit for special items like circular logos */
+  objectFit?: "contain" | "cover";
 }
 
-/* PLACEHOLDER: Replace with actual portfolio items */
-export const PORTFOLIO_ITEMS: PortfolioItem[] = [
-  { id: 1, title: "Client Project — Reels", category: "Reels", image: "/assets/placeholder-reel-1.svg" },
-  { id: 2, title: "Client Project — Shoots", category: "Shoots", image: "/assets/placeholder-reel-2.svg" },
-  { id: 3, title: "Client Project — Ads", category: "Ads", image: "/assets/placeholder-reel-3.svg" },
-  { id: 4, title: "Client Project — Editing", category: "Editing", image: "/assets/placeholder-reel-4.svg" },
-  { id: 5, title: "Client Project — Reels", category: "Reels", image: "/assets/placeholder-reel-5.svg" },
-  { id: 6, title: "Client Project — Shoots", category: "Shoots", image: "/assets/placeholder-reel-6.svg" },
-  { id: 7, title: "Client Project — Ads", category: "Ads", image: "/assets/placeholder-reel-1.svg" },
-  { id: 8, title: "Client Project — Editing", category: "Editing", image: "/assets/placeholder-reel-2.svg" },
-  { id: 9, title: "Client Project — Reels", category: "Reels", image: "/assets/placeholder-reel-3.svg" },
+export const GALLERY_ITEMS: GalleryItem[] = [
+  // 1 — Hero: Aroma Candles product shoot result (main image, prominent)
+  {
+    id: 1,
+    src: "/assets/gallary/main - 8.png",
+    type: "image",
+    orientation: "portrait",
+    title: "Aroma Candles — Product Shoot",
+    colSpan: 1,
+    rowSpan: 2,
+  },
+  // 2 — Landscape shoot
+  {
+    id: 2,
+    src: "/assets/gallary/3.png",
+    type: "image",
+    orientation: "landscape",
+    title: "Brand Campaign — Landscape",
+    colSpan: 2,
+    rowSpan: 1,
+  },
+  // 3 — Portrait creative
+  {
+    id: 3,
+    src: "/assets/gallary/1.png",
+    type: "image",
+    orientation: "portrait",
+    title: "Creative Portrait",
+    colSpan: 1,
+    rowSpan: 1,
+  },
+  // 4 — Aroma Candles video
+  {
+    id: 4,
+    src: "/assets/gallary/Aroma Candles.mp4",
+    type: "video",
+    orientation: "portrait",
+    title: "Aroma Candles — Behind the Lens",
+    colSpan: 1,
+    rowSpan: 2,
+  },
+  // 5 — Landscape shoot
+  {
+    id: 5,
+    src: "/assets/gallary/4.png",
+    type: "image",
+    orientation: "landscape",
+    title: "Brand Shoot — Wide",
+    colSpan: 2,
+    rowSpan: 1,
+  },
+  // 6 — Portrait
+  {
+    id: 6,
+    src: "/assets/gallary/2.png",
+    type: "image",
+    orientation: "portrait",
+    title: "Portrait Session",
+    colSpan: 1,
+    rowSpan: 1,
+  },
+  // 7 — SEUR: Shoot, Edit, Upload, Repeat — BTS team efforts
+  {
+    id: 7,
+    src: "/assets/gallary/SEUR.mp4",
+    type: "video",
+    orientation: "portrait",
+    title: "SEUR — Shoot, Edit, Upload, Repeat",
+    colSpan: 1,
+    rowSpan: 2,
+  },
+  // 7b — Instagram circular logo (fills gap beside SEUR, above main-8)
+  {
+    id: 13,
+    src: "/assets/gallary/9.png",
+    type: "image",
+    orientation: "landscape",
+    title: "Media Maestro Co",
+    colSpan: 1,
+    rowSpan: 1,
+    objectFit: "contain",
+  },
+  // 8 — Landscape
+  {
+    id: 8,
+    src: "/assets/gallary/5.png",
+    type: "image",
+    orientation: "landscape",
+    title: "Campaign Visuals",
+    colSpan: 2,
+    rowSpan: 1,
+  },
+  // 9 — Portrait
+  {
+    id: 9,
+    src: "/assets/gallary/6.png",
+    type: "image",
+    orientation: "portrait",
+    title: "Visual Story",
+    colSpan: 1,
+    rowSpan: 1,
+  },
+  // 10 — Mithala Art video
+  {
+    id: 10,
+    src: "/assets/gallary/Mithala Art.mp4",
+    type: "video",
+    orientation: "portrait",
+    title: "Mithala Art — Process Film",
+    colSpan: 1,
+    rowSpan: 2,
+  },
+  // 11 — Portrait
+  {
+    id: 11,
+    src: "/assets/gallary/7.png",
+    type: "image",
+    orientation: "portrait",
+    title: "Creative Concept",
+    colSpan: 1,
+    rowSpan: 1,
+  },
+  // 12 — Product Shoots
+  {
+    id: 12,
+    src: "/assets/gallary/Product Shoots (1).png",
+    type: "image",
+    orientation: "portrait",
+    title: "Product Photography",
+    colSpan: 1,
+    rowSpan: 1,
+  },
 ];
 
 // Marquee items

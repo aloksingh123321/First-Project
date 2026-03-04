@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import FadeInView from "@/components/animations/FadeInView";
 import { SERVICES } from "@/lib/constants";
 
@@ -63,16 +64,16 @@ export default function ServicesPage() {
                     </p>
                   </div>
 
-                  {/* Placeholder visual */}
+                  {/* Service Image */}
                   <div className={!isEven ? "lg:order-1" : ""}>
-                    {/* PLACEHOLDER: Replace with actual service image */}
-                    <div className="aspect-[4/3] rounded-2xl glass-card flex items-center justify-center">
-                      <div className="text-center">
-                        <Icon className="w-12 h-12 text-primary/30 mx-auto mb-2" />
-                        <span className="text-text-muted/40 text-sm">
-                          {service.title}
-                        </span>
-                      </div>
+                    <div className="aspect-[4/3] rounded-2xl overflow-hidden glass-card relative">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
                     </div>
                   </div>
                 </div>
