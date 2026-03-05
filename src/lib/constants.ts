@@ -146,6 +146,14 @@ export const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
+// Portfolio items
+export interface PortfolioItem {
+  id: number;
+  title: string;
+  category: "Reels" | "Shoots" | "Ads" | "Editing";
+  image: string;
+}
+
 // Gallery items
 export interface GalleryItem {
   id: number;
@@ -162,13 +170,13 @@ export interface GalleryItem {
 }
 
 export const GALLERY_ITEMS: GalleryItem[] = [
-  // 1 — Hero: Aroma Candles product shoot result (main image, prominent)
+  // 1 — Aroma Candles video reel
   {
     id: 1,
-    src: "/assets/gallary/main-8.png",
-    type: "image",
+    src: "/assets/gallary/aroma-candles.mp4",
+    type: "video",
     orientation: "portrait",
-    title: "Aroma Candles — Product Shoot",
+    title: "Aroma Candles — Reel",
     colSpan: 1,
     rowSpan: 2,
   },
@@ -192,13 +200,13 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     colSpan: 1,
     rowSpan: 1,
   },
-  // 4 — Aroma Candles video
+  // 4 — SEUR video
   {
     id: 4,
-    src: "/assets/gallary/aroma-candles.mp4",
+    src: "/assets/gallary/SEUR.mp4",
     type: "video",
     orientation: "portrait",
-    title: "Aroma Candles — Behind the Lens",
+    title: "SEUR — Brand Film",
     colSpan: 1,
     rowSpan: 2,
   },
@@ -222,17 +230,17 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     colSpan: 1,
     rowSpan: 1,
   },
-  // 7 — SEUR: Shoot, Edit, Upload, Repeat — BTS team efforts
+  // 7 — Mithala Art video
   {
     id: 7,
-    src: "/assets/gallary/SEUR.mp4",
+    src: "/assets/gallary/mithala-art.mp4",
     type: "video",
     orientation: "portrait",
-    title: "SEUR — Shoot, Edit, Upload, Repeat",
+    title: "Mithala Art — Showcase Reel",
     colSpan: 1,
     rowSpan: 2,
   },
-  // 7b — Instagram circular logo (fills gap beside SEUR, above main-8)
+  // 7b — Instagram circular logo
   {
     id: 13,
     src: "/assets/gallary/9.png",
@@ -243,13 +251,13 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     rowSpan: 1,
     objectFit: "contain",
   },
-  // 8 — Landscape
+  // 8 — Aroma Candles product shoot result (main image)
   {
     id: 8,
-    src: "/assets/gallary/5.png",
+    src: "/assets/gallary/main-8.png",
     type: "image",
     orientation: "landscape",
-    title: "Campaign Visuals",
+    title: "Aroma Candles — Product Shoot",
     colSpan: 2,
     rowSpan: 1,
   },
@@ -263,13 +271,13 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     colSpan: 1,
     rowSpan: 1,
   },
-  // 10 — Mithala Art video
+  // 10 — Creative lifestyle shoot
   {
     id: 10,
-    src: "/assets/gallary/mithala-art.mp4",
-    type: "video",
+    src: "/assets/gallary/5.png",
+    type: "image",
     orientation: "portrait",
-    title: "Mithala Art — Process Film",
+    title: "Creative Lifestyle Shoot",
     colSpan: 1,
     rowSpan: 2,
   },
@@ -290,6 +298,16 @@ export const GALLERY_ITEMS: GalleryItem[] = [
     type: "image",
     orientation: "portrait",
     title: "Product Photography",
+    colSpan: 1,
+    rowSpan: 1,
+  },
+  // 14 — Additional product/lifestyle image
+  {
+    id: 14,
+    src: "/assets/gallary/5.png",
+    type: "image",
+    orientation: "portrait",
+    title: "Lifestyle Campaign",
     colSpan: 1,
     rowSpan: 1,
   },
