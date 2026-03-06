@@ -99,12 +99,12 @@ export interface TeamMember {
 
 export const TEAM: TeamMember[] = [
   {
-    name: "Team Member",
+    name: "Sakshi Mall",
     role: "Founder",
     image: "/assets/placeholder-team-1.jpeg",
   },
   {
-    name: "Team Member",
+    name: "Vineet Sharma",
     role: "Co-Founder",
     image: "/assets/placeholder-team-2.jpeg",
   },

@@ -119,7 +119,8 @@ export default function AboutPage() {
                     )}
                   </div>
                   <div className="p-5 text-center">
-                    <p className="text-primary-light font-display font-bold text-base tracking-wide">{member.role}</p>
+                    <p className="text-text-primary font-display font-bold text-lg mb-1">{member.name}</p>
+                    <p className="text-primary-light font-display font-semibold text-sm tracking-wide">{member.role}</p>
                   </div>
                 </div>
               </StaggerItem>
