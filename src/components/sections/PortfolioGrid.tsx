@@ -11,7 +11,7 @@ export default function PortfolioGrid() {
   const previewItems = GALLERY_ITEMS.slice(0, 6);
 
   return (
-    <section className="py-20 md:py-28 bg-surface relative overflow-hidden">
+    <section className="py-20 md:py-28 bg-surface relative overflow-x-hidden">
       <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-primary rounded-full blur-[150px] opacity-[0.04] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,9 +25,9 @@ export default function PortfolioGrid() {
           {previewItems.map((item) => (
             <div
               key={item.id}
-              className={`group relative overflow-hidden rounded-xl glass-card cursor-pointer transition-all duration-300 hover:border-primary/20 hover:shadow-glow ${
+              className={`group relative overflow-hidden rounded-xl glass-card cursor-pointer transition-all duration-300 hover:border-primary/20 hover:shadow-glow w-full ${
                 item.colSpan === 2 ? "sm:col-span-2" : ""
-              } ${item.rowSpan === 2 ? "row-span-2" : ""}`}
+              } ${item.rowSpan === 2 ? "sm:row-span-2 row-span-1" : ""}`}
             >
               {/* Media */}
               {item.type === "video" ? (
@@ -49,9 +49,9 @@ export default function PortfolioGrid() {
                 />
               )}
 
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                <h3 className="text-text-primary font-display font-bold text-sm">
+              {/* Title overlay — always visible on mobile, hover on desktop */}
+              <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/20 to-transparent sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 sm:p-5">
+                <h3 className="text-text-primary font-display font-bold text-xs sm:text-sm">
                   {item.title}
                 </h3>
               </div>
@@ -68,3 +68,4 @@ export default function PortfolioGrid() {
     </section>
   );
 }
+

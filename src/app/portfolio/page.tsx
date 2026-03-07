@@ -6,8 +6,24 @@ import Image from "next/image";
 import FadeInView from "@/components/animations/FadeInView";
 import { GALLERY_ITEMS, type GalleryItem } from "@/lib/constants";
 
-/** Renders the hover preview via React portal so it is always
- *  centered in the viewport regardless of scroll or CSS transforms. */
+/** Returns true when the device has a real mouse pointer (not touch-only). */
+function useHasHover() {
+  const [hasHover, setHasHover] = useState(false);
+
+  useEffect(() => {
+    // (hover: hover) is false on phones / tablets, true on desktop
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    setHasHover(mq.matches);
+
+    const handler = (e: MediaQueryListEvent) => setHasHover(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  return hasHover;
+}
+
+/** Renders the hover preview via React portal — desktop only. */
 function PreviewPortal({ item }: { item: GalleryItem }) {
   const [mounted, setMounted] = useState(false);
 
@@ -79,6 +95,7 @@ function PreviewPortal({ item }: { item: GalleryItem }) {
 }
 
 export default function PortfolioPage() {
+  const hasHover = useHasHover();
   const [hoveredItem, setHoveredItem] = useState<GalleryItem | null>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -117,20 +134,24 @@ export default function PortfolioPage() {
       </section>
 
       {/* Full Masonry Gallery */}
-      <section className="py-20 md:py-28 bg-surface">
+      <section className="py-20 md:py-28 bg-surface overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[200px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-[200px] sm:auto-rows-[200px]">
             {GALLERY_ITEMS.map((item) => {
               const isCircularLogo = item.objectFit === "contain";
 
               return (
                 <div
                   key={item.id}
-                  className={`group relative overflow-hidden rounded-xl glass-card cursor-pointer transition-all duration-300 hover:border-primary/20 hover:shadow-glow ${
+                  className={`group relative overflow-hidden rounded-xl glass-card cursor-pointer transition-all duration-300 hover:border-primary/20 hover:shadow-glow w-full ${
                     item.colSpan === 2 ? "sm:col-span-2" : ""
-                  } ${item.rowSpan === 2 ? "row-span-2" : ""}`}
-                  onMouseEnter={() => handleMouseEnter(item)}
-                  onMouseLeave={handleMouseLeave}
+                  } ${item.rowSpan === 2 ? "sm:row-span-2 row-span-1" : ""}`}
+                  {...(hasHover
+                    ? {
+                        onMouseEnter: () => handleMouseEnter(item),
+                        onMouseLeave: handleMouseLeave,
+                      }
+                    : {})}
                 >
                   {/* Media */}
                   {item.type === "video" ? (
@@ -164,9 +185,9 @@ export default function PortfolioPage() {
                     />
                   )}
 
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                    <h3 className="text-text-primary font-display font-bold text-sm">
+                  {/* Hover overlay — only show title label on mobile, full overlay on desktop */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/90 via-surface-dark/20 to-transparent sm:opacity-0 sm:group-hover:opacity-100 opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 sm:p-5">
+                    <h3 className="text-text-primary font-display font-bold text-xs sm:text-sm">
                       {item.title}
                     </h3>
                   </div>
@@ -177,8 +198,8 @@ export default function PortfolioPage() {
         </div>
       </section>
 
-      {/* Hover Preview — rendered via portal on document.body */}
-      {hoveredItem && hoveredItem.type === "image" && (
+      {/* Hover Preview — desktop only, rendered via portal */}
+      {hasHover && hoveredItem && hoveredItem.type === "image" && (
         <PreviewPortal item={hoveredItem} />
       )}
 
@@ -196,4 +217,3 @@ export default function PortfolioPage() {
     </>
   );
 }
-
