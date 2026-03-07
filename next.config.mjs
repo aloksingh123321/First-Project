@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    output: "export",
     images: {
-        // Serve images directly without Next.js optimization.
-        // Required on Vercel when gallery images are very large (10–35 MB).
+        // Static export cannot use Next.js image optimization.
         unoptimized: true,
     },
+    // Trailing slashes help static hosting map /about → /about/index.html
+    trailingSlash: true,
 };
 
 export default nextConfig;

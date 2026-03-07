@@ -20,6 +20,7 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mediamaestroco.com"),
   title: "Media Maestro Co | Social Media Agency",
   description:
     "Media Maestro Co helps brands grow online through content creation, social media management, paid ads, and professional shoots.",
@@ -40,8 +41,17 @@ export const metadata: Metadata = {
     description: "Where Your Brand Gets the Spotlight",
     url: "https://mediamaestroco.com",
     siteName: "Media Maestro Co",
-    images: [{ url: "/og-image.svg", width: 1200, height: 630 }],
+    images: [{ url: "/og-image.png", width: 1912, height: 970 }],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Media Maestro Co | Social Media Agency",
+    description: "Where Your Brand Gets the Spotlight",
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: "https://mediamaestroco.com",
   },
   robots: { index: true, follow: true },
 };
