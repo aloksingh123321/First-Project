@@ -325,7 +325,7 @@ export const MARQUEE_ITEMS = [
 
 // Contact info
 export const CONTACT_INFO = {
-  email: "mediamaestroco01@gmail.com",
+  email: "mediamaestroco@gmail.com",
   instagram: "@mediamaestroco",
   instagramUrl: "https://instagram.com/mediamaestroco",
   city: "India",
