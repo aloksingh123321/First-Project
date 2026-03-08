@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
+import Script from "next/script";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 
@@ -25,16 +26,20 @@ export const metadata: Metadata = {
   description:
     "Media Maestro Co helps brands grow online through content creation, social media management, paid ads, and professional shoots.",
   keywords: [
+    "Media Maestro Co",
+    "media maestro",
     "social media agency",
     "content creation",
     "digital marketing",
-    "media maestro",
     "social media management",
     "paid ads",
     "professional shooting",
   ],
   icons: {
     icon: "/favicon1.png",
+  },
+  verification: {
+    google: "tOM-8LUrEwczCeW2O5r69suXrlfjHNnmNwUXvS3JRVo",
   },
   openGraph: {
     title: "Media Maestro Co | Social Media Agency",
@@ -63,6 +68,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${syne.variable}`}>
+      <head>
+        {/* Google Analytics (GA4) */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XL016F8NEK"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XL016F8NEK');
+          `}
+        </Script>
+      </head>
       <body className="font-sans antialiased">
         {/* 2px reading progress bar at top */}
         <ScrollProgress />
